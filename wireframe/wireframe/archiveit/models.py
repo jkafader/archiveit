@@ -55,12 +55,20 @@ class Seed(models.Model):
     url = models.URLField(max_length=200)
     collection = models.ForeignKey('Collection')
     frequency = models.CharField(max_length=3, choices=CONSTANTS['SeedFrequency'])
+    capture = models.ForeignKey('SeedCapturePattern', blank=True, null=True)
     public = models.BooleanField(default=False)
     folder = models.ForeignKey('SeedFolder', blank=True, null=True, )#default=get_uncategorized_seed_folder)
     group = models.ForeignKey('SeedGroup', blank=True, null=True)
     metadata = PickledObjectField(blank=True, null=True)
     def __unicode(self):
         return "[Seed] {}{}{}".format(self.url, self.public and " (public)", self.frequency and " frequency: " + self.frequency)
+
+# SeedCapturePatterns are a list of filetypes patterns for seeds to capture. They're set up as a class so they can be administered through the admin.
+class SeedCapturePattern(models.Model):
+    name = models.CharField(max_length=100)
+    pattern = models.CharField(max_length=200)
+    def __unicode__(self):
+        return "[SeedCapturePattern] {} ({})".format(self.name, self.pattern)
 
 # SeedScopeRules define boundaries for Crawls spawned by a Seed.
 class SeedScopeRule(models.Model):

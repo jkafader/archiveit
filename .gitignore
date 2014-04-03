@@ -21,3 +21,10 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
+
+bower_*
+.sass*
+.bower*
+*.DS_Store
+*~
