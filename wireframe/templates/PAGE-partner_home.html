@@ -1,2 +1,150 @@
 {% extends "PAGE-base.html" %}
 
+{% block content %}
+    {% with message_set=request.user.get_profile.account.accountmessage_set.all %}
+      {% if message_set %}
+        <h5>Messages</h5>
+        {% for message in message_set %}
+          <div class='alert-box info radius' data-alert>{{ message.message }} {% if message.target_url %}<a href='{{ message.target_url }}'>Details &raquo;</a>{% endif %}<a href='#' class='close'>&times;</a></div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h5>Active Collections</h5>
+    <a href='/collection/add/' class='button small bold uppercase'>+ Create New Collection</a>
+    <table class=''>
+      <thead>
+	<tr>
+      <th>Name</th>
+	  <th>Most Recent Crawl</th>
+	  <th>Next Scheduled Crawl</th>
+	</tr>
+      </thead>
+      <tbody>
+        {% if not active_collections %}
+        <tr>
+          <td colspan='3'>No collections found.</td>
+        </tr>
+        {% endif %}
+	{% for collection in active_collections %}
+	<tr>
+	  <td><a href='/collection/{{ collection.id }}/'>{{ collection.name }}</a></td>
+	  <td>{{ collection.last_crawl|default:"No Crawls Yet" }}</td>
+	  <td>{{ collection.get_next_crawl_date|default:"None Scheduled" }}</td>
+	</tr>
+	{% endfor %}
+      </body>
+    </table>
+
+    <h5>Inactive Collections</h5>
+    <table class=''>
+      <thead>
+	<tr>
+	    <th>Name</th>
+	    <th>Last Crawl</th>
+	    <th></th>
+	</tr>
+      </thead>
+      <tbody>
+        {% if not inactive_collections %}
+        <tr>
+          <td colspan='3'>No Inactive Collections</td>
+        </tr>
+        {% endif %}
+        {% for collection in inactive_collections %}
+	<tr>
+	   <td>{{ collection.name }}</td>
+	   <td>{{ collection.last_crawl | default:"No Crawls." }}</td>
+	   <td><a href='/collections/{{ collection.id }}/activate/'>Activate Collection</a></td>
+	</tr>
+        {% endfor %}
+      </body>
+
+    </table>
+{% endblock %}
+
+{% block rightcolumn %}
+    <div>
+    <h5>Current Subscription</h5>
+    <div id='chart' class="panel">
+    <h5>DATA</h5>
+    <svg style='width:100%; height:200px;'></svg>
+    <script>
+    nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+        .x(function(d){ return d.label; })
+        .y(function(d){ return d.value; })
+        .color(["#666","#BBB"])
+        .showLabels(false)
+        .showLegend(false)
+        .margin({top:-10, left:-10, bottom:-10, right:-10})
+        .donut(true)
+        
+        d3.select("#chart svg")
+        .datum([
+            { label: "Used Space", value: "3" },
+            { label: "Unused Space", value:"6"}
+        ])
+        .call(chart);
+        
+        d3.select("#chart svg")
+        .append("text")
+        .text("33.3%")
+        .attr({dy: "50%", dx: "50%"})
+        .style({"text-anchor": "middle", "font-weight": "bold", "font-size": "25px"});
+
+        d3.select("#chart svg")
+        .append("text")
+        .text("used")
+        .attr({dy: "57%", dx: "50%"})
+        .style({"text-anchor": "middle", "font-size": "14px"});
+
+        nv.utils.windowResize(function() { chart.update() });
+    })
+    </script>
+    </div>
+    <div id='chart2' class="panel">
+        <h5>DOCUMENTS</h5>
+    <svg style='width:100%; height:200px;'></svg>
+    <script>
+    nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+        .x(function(d){ return d.label; })
+        .y(function(d){ return d.value; })
+        .color(["#666", "#BBB"])
+        .showLabels(false)
+        .showLegend(false)
+        .margin({top:-10, left:-10, bottom:-10, right:-10})
+        .donut(true)
+        
+        d3.select("#chart2 svg")
+        .datum([
+            { label: "Used Space", value: "4" },
+            { label: "Unused Space", value:"5" }
+        ])
+        .call(chart);
+        
+        d3.select("#chart2 svg")
+        .append("text")
+        .text("45.7%")
+        .attr({dy: "50%", dx: "50%"})
+        .style({"text-anchor": "middle", "font-weight": "bold", "font-size": "25px"});
+
+        d3.select("#chart2 svg")
+        .append("text")
+        .text("used")
+        .attr({dy: "57%", dx: "50%"})
+        .style({"text-anchor": "middle", "font-size": "14px"});
+        
+        nv.utils.windowResize(function() { chart.update() });
+    })
+    </script>
+
+    </div>
+    <h5>All Subscriptions</h5>
+    <div class="panel"></div>
+    <h5>Help</h5>
+    <div class="panel">
+    </div>
+    </div>
+{% endblock %}

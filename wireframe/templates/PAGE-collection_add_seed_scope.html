@@ -1,0 +1,82 @@
+{% extends "PAGE-base.html" %}
+{% load archiveit_extras %}
+
+{% block content %}
+{% include "PARTIAL-wizard_steps.html" %}
+
+<form action='.' method='POST'>
+<div class='panel blanktable'>
+  {% csrf_token %}
+  <table><tbody>
+  {% if form.non_field_errors %}
+  <tr class='form-error'>
+    <td><div class='alert-box' data-alert>{{ form.non_field_errors }}</div></td>
+  </tr>
+  {% endif %} 
+  {% if form.rule_type.errors or form.rule_match.errors %}
+        {% for error in field.errors %}
+            <tr class='form-error'>
+            <td class='alert-box' data-alert>{{ error }}</td>
+            </tr>
+        {% endfor %}
+  {% endif %}
+  <tr class='formfield'>
+     <td>
+       <div class='row collapse'>
+         <span class='medium-2 width-20-percent columns form-label'>Block URL:</span>
+         <span class='medium-5 columns'>{{ form.rule_type }}</span>
+         <span class='medium-4 columns left' style='padding-left:1em;'>{{ form.rule_match }}</span>
+       </div>
+       </div>
+     </td>
+  </tr>
+  {% if form.use_document_limit.errors or form.document_limit.errors %}
+        {% for error in field.errors %}
+          <tr class='form-error'>
+            <td class='alert-box' data-alert>{{ error }}</td>
+          </tr>
+        {% endfor %}
+  {% endif %}
+  <tr class='formfield'>
+     <td>
+       <div class='width-20-percent form-label'>Document Limit:</div>
+       <div class='width-80-percent'>
+         {{ form.use_document_limit }} 
+         limit the number of documents to 
+         <span class='width-30-percent'>{{ form.document_limit }}</span>
+       </div>
+     </td>
+  </tr>
+ {% for field in form.hidden_fields %}
+    {{ field }}
+ {% endfor %}
+</tbody></table>
+  <div class='width-20-percent'></div>
+  <div class='width-80-percent padding-left half'>
+    <input type='submit' class='button secondary small border padding-top padding-bottom quarter' value='Add Rule'>
+  </div>
+</div>
+</form>
+<div class='margin-bottom four'>
+  <a href='/collection/{{ collection.id }}/add-metadata/' class='button secondary uppercase bold small margin-right two'>&laquo; Previous</a>
+  <a href='/collection/{{ collection.id }}/review/' class='button uppercase bold small'>Next &raquo;</a>
+</div>
+
+{% with rules=collection.seedscoperule_set.all %}
+  {% if not rules %}
+    <h5>Your Scoping Rules</h5>
+    <hr>
+    <div class='margin-bottom six'>
+    You have not added any rules to this collection yet...
+    </div>
+  {% else %}
+    {% include "PARTIAL-seed_scope_grid.html" %}
+  {% endif %}
+{% endwith %}
+
+{% endblock %}
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}

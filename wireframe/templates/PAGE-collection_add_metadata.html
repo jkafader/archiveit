@@ -1,0 +1,61 @@
+{% extends "PAGE-base.html" %}
+
+{% block content %}
+{% include "PARTIAL-wizard_steps.html" %}
+
+<h5>Add any metadata needed for this collection. You can use any or all of three metadata 
+schemas: Dublin Core, MARC, and MODS. We have suggested some metadata that you can 
+choose to add.</h5>
+<div class='row'>
+<div class='medium-8 columns'>
+{% with metadata=collection.metadata %}
+{% include "PARTIAL-metadata_grid.html" %}
+{% endwith %}
+
+<form action='.' method='POST'>
+  <div class='hidden' style='display:none;'>
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class='small-12 columns form-error'>
+    <div class='alert-box' data-alert>{{ form.non_field_errors }}</div>
+  </div>
+  {% endif %} 
+
+  {% for field in form %}
+  <div class='formfield row'> 
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <div class='small-12 columns form-error'><div class='alert-box' data-alert>{{ error }}</div></div>
+        {% endfor %}
+    {% endif %}
+    {% if not field.is_hidden %}
+		<div class='small-2 columns'>{{ field.label }}</div>
+    {% endif %}
+    <div class='small-10 columns'>
+    {% if field.name == "metadata" %}
+		{% verbatim %}
+		<textarea name='metadata'>{{ metadata | json }}</textarea>  
+		{% endverbatim %}
+    {% else %}
+		{{ field }}
+    {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+  <a href='/collection/{{ collection.pk }}/add-seeds/' class='button small uppercase bold secondary margin-right three'>&laquo; Previous</a>
+  <input type='submit' class='button small uppercase bold' value='Next &raquo;'></input>
+</form>
+</div>
+</div>
+<div class='medium-4 columns show-for-medium-up'>
+{% include "PARTIAL-popular_metadata.html" %}
+</div>
+</div>
+	
+{% endblock %}
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}

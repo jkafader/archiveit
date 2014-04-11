@@ -1,0 +1,88 @@
+{% verbatim %}
+<div ng-controller="MetadataController">
+
+<br>
+<div class='panel'>
+<div ng-show='show_buttons'>
+  <div class='button' ng-hide='editing' ng-click='editing=true'>Edit</div>
+  <div class='button secondary' ng-show='editing' ng-click='editing=false'>Cancel</div>
+</div>
+   <div ng-repeat="field in schemas.current.fields" class='row {{ editing || "panel" }}' ng-show='editing || metadata[field.slug]'>
+     <div class='small-2 columns'>{{ field.name }}</div>
+     <div class='small-10 columns'>
+        <div class='row collapse' ng-show='editing'>
+        <div class='small-10 columns'>
+           <input type="text" ng-model="field_values[field.slug]" ng-focus="paste($event)">
+        </div>
+        <div class='small-2 columns'>
+           <span class='postfix' ng-click="metadata_push(field.slug, field_values[field.slug])">Add</span>
+        </div>
+        </div>
+        <div class='{{ editing && "panel" }}' ng-repeat="value in metadata[field.slug] track by $index">
+        {{ value }}<a class='right' ng-show='editing' ng-click="metadata_remove(field.slug, value)">Remove</a>
+        </div>
+     </div>
+   </div>
+
+</div>
+{% endverbatim %}
+
+<script>
+app.controller("MetadataController", ["$scope", "$rootScope", function($scope, $rootScope){
+    $scope.field_values = {};
+    $scope.show_buttons = {{ buttons|default:"false" }};
+    $scope.editing = {{ editing|default:"true" }};
+    $scope.metadata_push = function(key, value){
+        if(!value){ return }
+        if($scope.metadata[key]){
+           $scope.metadata[key].push(value);
+        } else {
+           $scope.metadata[key] = [value];
+        }
+        $scope.field_values[key] = "";
+    };
+    $scope.metadata_remove = function(key, value){
+        idx = $scope.metadata[key].indexOf(value);
+        // not in array
+        if(idx === -1){ return }
+        $scope.metadata[key].splice(idx,1);
+    };
+    $scope.metadata = {{ metadata|safe|default:"{}" }};
+    $scope.schemas = {
+       dublincore: {name: "Dublin Core"},
+       marc: {name: "MARC"},
+       mods: {name: "MODS"},
+    };
+    $scope.schemas.dublincore.fields = [
+       {slug: 'title', name: 'Title', regex: ''}, 
+       {slug: 'creator', name: 'Creator', regex: ''}, 
+       {slug: 'subject', name: 'Subject', regex: ''}, 
+       {slug: 'description', name: 'Description', regex: ''}, 
+       {slug: 'publisher', name: 'Publisher', regex: ''}, 
+       {slug: 'contributor', name: 'Contributor', regex: ''}, 
+       {slug: 'date', name: 'Date', regex: ''}, 
+       {slug: 'type', name: 'Type', regex: ''}, 
+       {slug: 'format', name: 'Format', regex: ''}, 
+       {slug: 'identifier', name: 'Identifier', regex: ''}, 
+       {slug: 'source', name: 'Source', regex: ''}, 
+       {slug: 'relation', name: 'Relation', regex: ''}, 
+       {slug: 'coverage', name: 'Coverage', regex: ''}, 
+       {slug: 'rights', name: 'Rights', regex: ''}, 
+       {slug: 'collector', name: 'Collector', regex: ''}, 
+       {slug: 'language', name: 'Language', regex: ''}, 
+    ];
+    $scope.schemas.current = $scope.schemas['dublincore'];
+    $scope.clipboard = null;
+    $scope.paste = function($event){
+        if($scope.clipboard && !$event.target.value){
+			$($event.target).val($scope.clipboard).change();
+			$scope.clipboard = null;
+			$('body, input').css('cursor', 'auto');
+		}
+    };
+    $rootScope.$on('copy', function(ev, val){ 
+        $scope.clipboard = val;
+        $('body, input').css('cursor', 'copy');
+    });
+}]);
+</script>

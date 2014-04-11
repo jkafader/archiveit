@@ -1,0 +1,105 @@
+{% comment %} This contains the 'jsonize' template filter. {% endcomment %}
+{% load archiveit_extras %}
+
+{% verbatim %}
+<div class='seed grid' ng-controller='SeedController'>
+<h5>Your Seeds: {{ seeds.length }} Added</h5>
+
+<div reveal-modal='showDeleteConfirm' class='reveal-modal tiny' data-reveal>
+<p>Are you sure you'd like to delete the selected Seeds?</p>
+<input type='button' class='button secondary' ng-click='showDeleteConfirm=false' value='Cancel'>
+<input type='button' class='button' ng-click='delete()' value='Delete'>
+</div>
+
+<form action='/json/' method='POST' class='inline-block'>
+<textarea name='models' style='display:none;'>{{ seeds }}</textarea>
+{% endverbatim %}
+{% csrf_token %}
+<input type='hidden' name='next' value='{{ request.path }}'>
+{% verbatim %}
+<ul class='button-group'>
+  <li><div class='button tiny uppercase bold nomargin padding-left padding-right two'><input type='checkbox' ng-model='selectAllChecked' ng-change='toggleAll()'></div></li>
+  <li><div class='button tiny uppercase bold nomargin' ng-click='confirmDelete()'>Delete Selected</div></li>
+  <li><div class='button secondary tiny uppercase bold nomargin' ng-click='toggleEditing()' ng-hide='editing'>Edit</div></li>
+  <li><div ng-show='editing' class='button secondary tiny uppercase bold nomargin' ng-click='cancelChanges()'>Discard Edits</div></li>
+  <li><input type='submit' ng-show='editing' class='button tiny uppercase bold nomargin' value='Save Changes'></li>
+</ul>
+</form>
+<table class=''>
+  <thead>
+    <tr>
+      <th class='head select'></th>
+      <th class='head url' style='width:40%;'>URL</th>
+      <th class='head frequency' style='width:15%'>Frequency</th>
+      <th class='head visible'>Public</th>
+      <th class='head login'>Login</th>
+      <th class='head groups' style='width:20%'>Groups</th>
+      <th class='head comments' style='width:5%'>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="seed in seeds">
+      <td class='select'><input type='checkbox' ng-checked='selection[seed.pk]'></td>
+      <td class='url'>
+        <span ng-hide='editing'>{{ seed.fields.url }}</span>
+        <span ng-show='editing'><input type='text' ng-model="seed.fields.url"></span>
+      </td>
+      <td class='frequency'>
+        <span ng-hide='editing'>{{ seed.fields.frequency }} days</span>
+        <div ng-show='editing' class='row collapse'>
+            <div class='small-7 columns'>
+              <input type='text' ng-model='seed.fields.frequency'>
+            </div>
+            <div class='small-5 columns'>
+              <span class='postfix'>days</span>
+            </div>
+        </div></td>
+      <td class='visible'>
+        <span ng-hide='editing'>{{ seed.fields.public && "&#10004;" || "" }}</span>
+        <span ng-show='editing'><input type='checkbox' ng-model='seed.fields.public'></span></td>
+      <td class='login'>
+        <span ng-hide='editing'>{{ seed.fields.login && "&#10004;" || "" }}</span>
+        <span ng-show='editing'><input type='checkbox' ng-model='seed.fields.login'></span></td>
+      <td class='groups'>
+        <span ng-hide='editing'>{{ seed.fields.group }}</span>
+        <span ng-show='editing'><select></select></span></td>
+      <td class='comments'>
+        {{ comments[seed.pk].count }}</td>
+    </tr>
+  </tbody>
+</table>
+{% endverbatim %}
+
+<script>
+app.controller("SeedController", ["$scope", function($scope){
+    $scope.seeds = {{ seeds|jsonize|safe }};
+    $scope.selection = {};
+    $scope.editing = false;
+    $scope.selectAllChecked = false;
+    $scope.delete = function(){
+        $scope.showDeleteConfirm = false;
+        alert('Bulk deletion is not yet implemented.');
+    }
+    $scope.confirmDelete = function(){
+        $scope.showDeleteConfirm = true;
+    }
+    $scope.cancelChanges = function(){
+        $scope.editing = false;
+        $scope.seeds = $scope.initialSeeds;
+    }
+    $scope.toggleEditing = function(){
+        $scope.editing = !$scope.editing;
+        // if we're currently editing, save a copy of the initial state of the seeds so we can cancel edits.
+        if($scope.editing){
+            $scope.initialSeeds = angular.copy($scope.seeds);
+        }
+    }
+    $scope.toggleAll = function(){
+        if($scope.selectAllChecked == false){ $scope.selection={}; return }
+        for(i=0; i<$scope.seeds.length; i++){
+            $scope.selection[$scope.seeds[i].pk] = true;
+        }
+    }
+}]);
+</script>
+</div>	

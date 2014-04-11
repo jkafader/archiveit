@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'wireframe.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^', include('wireframe.archiveit.urls')),
+    url(r'^', include('wireframe.archiveit.urls', namespace='archiveit')),
     # TODO: add urls for account system.
     #url(r'^account/$', include(wireframe.accounts.urls)),
     url(r'^admin/', include(admin.site.urls)),

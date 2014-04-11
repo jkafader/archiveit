@@ -1,20 +1,110 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html ng-app="ArchiveIt">
 <head>
     <meta charset="utf-8">
-    {% block title %}<title>{{ title }}</title>{% endblock %}
-    <link rel="stylesheet" href="{% static "css/app.css" %}">
+    {% block title %}<title>{% if title %}{{ title }}{% else %}Archive-it Wireframe{% endif %}</title>{% endblock %}
+    <link rel="stylesheet" href="{% static 'foundation/css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nv.d3.min.css' %}">
+{% block scripts %}
+<script src="{% static 'foundation/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'foundation/bower_components/foundation/js/foundation.min.js' %}"></script>
+<script src="{% static 'foundation/js/app.js' %}"></script>
+<script src="{% static 'js/angular/angular.min.js' %}"></script>
+<script src="{% static 'js/d3.min.js' %}"></script>
+<script src="{% static 'js/nv.d3.min.js' %}"></script>
+{% endblock %}
+<script>
+{% block reveal_modal_directive %}
+var app = angular.module('ArchiveIt', []);
+app.directive('revealModal', function (){
+   return function(scope, elem, attrs) {
+     console.log($(elem).foundation());
+     scope.$watch(attrs.revealModal, function(val) {
+        if(val) {           
+           $(elem).foundation('reveal', 'open');
+        } else {
+           $(elem).foundation('reveal', 'close');
+        }
+     });
+   }
+});
+{% endblock %}
+{% block angular %}<!-- this block may be used to inject angular.js code -->{% endblock %}
+</script>
+
 </head>
 <body>
 {% block header %}
+  <header class='row'>
+    <div class='padding-left padding-top one'>
+      <div class='small-12 columns'>
+      <div class='medium-1 columns logo show-for-medium-up'><h3 class=''>Partner Logo<h3></div>
+      <div class='medium-3 columns member-since show-for-large-up'><br><br>Member since {{ request.user.get_profile.account.created_on|date:"F Y" }}</div>
+      <div class='right medium-7 small-12 columns'>
+          <div class='row'>
+             <div class='small-12 columns'>
+                 <div class='right padding-right padding-bottom one user-welcome show-for-medium-up'>
+                  Welcome, <a href='/account/'>{{ request.user.get_full_name|default:request.user.username }}</a>
+                 </div>
+             </div>
+          </div>
+          <dl class='sub-nav right user-nav show-for-medium-up'>
+              <dd><a href="#/account/settings">Account Settings</a></dd>
+              <dd><a href="">Help</a></dd>
+              <dd><a href="#/account/admin">User Admin</a></dd>
+              <dd><a href="#/logout">Log Out</a></dd>
+          </dl>
+      </div>
+      </div>
+    </div>
+  </header>
+  <nav class="top-bar row" data-topbar>
+  <section class='top-bar-section small-12 columns'>
+  <div class='small-12 columns'>
+  <ul class='left'>
+    <li><a href="/">Collections</a></li>
+    <li><a href="#/crawls">Crawls</a></li>
+    <li><a href="#/reports">Reports</a></li>
+    <li><a href="#/archive">Archive</a></li>
+  </ul>
+  </div>
+  </section>
+  </nav>
 {% endblock %}
+
+
+{% block content_row_start %}<div class='row'><div class='small-12 columns'>{% endblock %}
+
+{% block content_header %}<br><article class='medium-9 columns main'>{% endblock %}
 
 {% block content %}
 {% endblock %}
+
+{% block content_footer %}</article>{% endblock %}
+
+{% block rightcolumn_header %}<aside class='medium-3 columns show-for-medium-up'>{% endblock %}
 {% block rightcolumn %}
 {% endblock %}
+{% block rightcolumn_footer %}</aside>{% endblock %}
+
+{% block content_row_end %}</div></div>{% endblock %}
 
 {% block footer %}
+  <footer class='row'>
+    <div class='12-small columns'>
+    <br>
+    <dl class="sub-nav">
+      <dd class="active"><a href="#">Help</a></dd>
+      <dd><a href="#">Submit a Question</a></dd>
+      <dd><a href="#">Bookmarklet</a></dd>
+      <dd><a href="#">Contact Us</a></dd>
+      <dd><a href="#">About Archive It</a></dd>
+    </dl>
+    <br><br><br><br>
+    </div>  
+  </footer>
 {% endblock %}
+
 </body>
 </html>

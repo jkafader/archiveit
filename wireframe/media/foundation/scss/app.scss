@@ -1,5 +1,6 @@
 @import "settings";
 @import "foundation";
+@import url(http://fonts.googleapis.com/css?family=Nunito:400,300,700);
 
 // Or selectively include components
 // @import
@@ -38,3 +39,130 @@
 //   "foundation/components/type",
 //   "foundation/components/offcanvas",
 //   "foundation/components/visibility";
+
+// padding helpers
+.padding-top.two { padding-top:2em; }
+.padding-top.one { padding-top:1em; }
+.padding-top.half { padding-top:0.5em; }
+.padding-top.quarter { padding-top:0.25em; }
+.padding-top.zero { padding-top:0; }
+
+.padding-bottom.two { padding-bottom:2em; }
+.padding-bottom.one { padding-bottom:1em; }
+.padding-bottom.half { padding-bottom:0.5em; }
+.padding-bottom.quarter { padding-bottom:0.25em; }
+.padding-bottom.zero { padding-bottom:0; }
+
+.padding-right.two { padding-right:2em; }
+.padding-right.one { padding-right:1em; }
+.padding-right.half { padding-right:0.5em; }
+.padding-right.quarter { padding-right:0.25em; }
+.padding-right.zero { padding-right:0; }
+
+.padding-left.two { padding-left:2em; }
+.padding-left.one { padding-left:1em; }
+.padding-left.half { padding-left:0.5em; }
+.padding-left.quarter { padding-left:0.25em; }
+.padding-left.zero { padding-left:0; }
+
+// margin helpers 
+.margin-bottom.zero { margin-bottom:0; }
+.margin-bottom.one { margin-bottom:1em; }
+.margin-bottom.two { margin-bottom:2em; }
+.margin-bottom.three { margin-bottom:3em; }
+.margin-bottom.four { margin-bottom:4em; }
+.margin-bottom.five { margin-bottom:5em; }
+.margin-bottom.six { margin-bottom:6em; }
+
+.margin-right.zero { margin-right:0; }
+.margin-right.one { margin-right:1em; }
+.margin-right.two { margin-right:2em; }
+.margin-right.three { margin-right:3em; }
+.margin-right.four { margin-right:4em; }
+.margin-right.five { margin-right:5em; }
+.margin-right.six { margin-right:6em; }
+
+.margin-left.zero { margin-left:0; }
+.margin-left.one { margin-left:1em; }
+.margin-left.two { margin-left:2em; }
+.margin-left.three { margin-left:3em; }
+.margin-left.four { margin-left:4em; }
+.margin-left.five { margin-left:5em; }
+.margin-left.six { margin-left:6em; }
+
+.margin-top.zero { margin-top:0; }
+.margin-top.one { margin-top:1em; }
+.margin-top.two { margin-top:2em; }
+.margin-top.three { margin-top:3em; }
+.margin-top.four { margin-top:4em; }
+.margin-top.five { margin-top:5em; }
+.margin-top.six { margin-top:6em; }
+
+// general helpers
+.small-type { font-size:rem-calc(12); }
+.inline-block { display:inline-block; }
+.uppercase { text-transform: uppercase; }
+.bold { font-weight: bold; } 
+.uppercase.bold { letter-spacing: rem-calc(.5); }
+.width-10-percent { width:9%; display:inline-block; }
+.width-18-percent { width:18%; display:inline-block; }
+.width-20-percent { width:19%; display:inline-block; }
+.width-30-percent { width:29%; display:inline-block; }
+.width-40-percent { width:39%; display:inline-block; }
+.width-50-percent { width:49%; display:inline-block; }
+.width-60-percent { width:59%; display:inline-block; }
+.width-70-percent { width:69%; display:inline-block; }
+.width-80-percent { width:79%; display:inline-block; }
+.width-90-percent { width:89%; display:inline-block; }
+.width-100-percent { width:99%; display:inline-block; }
+
+// button modifications
+.button.border { border:1px solid #888; }
+.button input[type="checkbox"] { margin:0; }
+.button.nomargin { margin:0; }
+.form-label { font-weight:bold; }
+
+// header/footer block styles
+header { background: #333; color:white; }
+footer { background: #333; color:white; }
+
+// header bar styles
+header .logo, header .member-since {  }
+.logo { margin-top:-0.4em; }
+.logo h3 { color:white; line-height:1;}
+.top-bar-section ul li a { text-transform:uppercase; font-size:rem-calc(15);}
+.user-welcome { color: white; font-size:rem-calc(14); }
+.user-welcome a { color:#DDD; text-decoration:underline; }
+.user-welcome a:hover { color:#AAA; text-decoration:none; }
+.member-since { font-size:rem-calc(14); margin-left:rem-calc(30); }
+.user-nav { margin-bottom:0; }
+.user-nav dd { margin-left:0; }
+.user-nav dd a { color: white; font-size: rem-calc(12); border-right: 1px solid white; 	}
+.user-nav dd a:hover { color: #DDD; }
+.user-nav dd:last-child a { border-right:0; }
+
+// wizard step styles
+.wizard-step.active { background:#666; color:white; font-weight:bold; }
+.wizard-step { background:#CCC; color: #666; font-size:rem-calc(15); padding:0.7em 0 0.6em 0.9em; margin-left:-6px; white-space:nowrap; overflow:hidden; }
+.wizard-arrowtail { border-left:rem-calc(17.7) solid transparent; border-top: rem-calc(17.8) solid #CCC; border-bottom: rem-calc(18) solid #CCC; float:left; margin-left:-6px; }
+.wizard-arrowtail.active { border-top: rem-calc(17.8) solid #666; border-bottom: rem-calc(18) solid #666; }
+.wizard-arrowhead { border-left:17px solid #CCC; border-top: 17px solid transparent; border-bottom:18px solid transparent; float:left; margin-left:-6px; margin-right:-9px; }
+.wizard-arrowhead.active { border-left:18px solid #666; }
+.wizard-arrowtail-boundary { width:17px; overflow:hidden; float:left; margin-left:2px; float:left; }
+.wizard-steps { margin-left:6px; }
+.wizard-steps-border { margin-left:-6px; border-bottom:2px solid #666; float:left; width:100%; }
+
+// table styles
+.blanktable table,
+.blanktable table tbody tr:nth-of-type(even),  
+.blanktable table tbody tr:nth-of-type(odd) { background:none; }
+table { width: 100%; }
+th { text-transform:uppercase; }
+table tbody tr:nth-of-type(odd) { background: #eee; }
+table tbody tr td { vertical-align:middle; }
+table tbody tr td a { text-decoration:underline; }
+table tbody tr td input[type=text], 
+table tbody tr td input[type=checkbox], 
+table tbody tr td textarea, 
+table tbody tr td select { margin-bottom:0; }
+table tbody tr td.alert-box { margin-bottom:0; padding-top:rem-calc(5); padding-bottom:rem-calc(5); }

@@ -1,8 +1,9 @@
 from django.db import models
-from picklefield.fields import PickledObjectField
+import jsonfield
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from datetime import datetime
+
 
 CONSTANTS = {
     'SeedFrequency': (
@@ -24,17 +25,23 @@ CONSTANTS = {
 # Collections represent 
 class Collection(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey("auth.User", blank=True, null=True)
+    owner = models.ForeignKey("accounts.Account", blank=True, null=True)
     public = models.BooleanField(default=False)
-    metadata = PickledObjectField()
+    metadata = jsonfield.JSONField()
     active = models.BooleanField(default=True)
     topics = models.ForeignKey('CollectionTopic', blank=True, null=True)
-    created_on = models.DateTimeField(default=datetime.now)
+    created_on = models.DateTimeField(blank=True, null=True)
     updated_on = models.DateTimeField(blank=True, null=True)
+    last_crawl = models.DateTimeField(blank=True, null=True)
+    comments = generic.GenericRelation('Comment')
+    def next_crawl_date(self):
+        return datetime.now + datetime.timedelta(7)
     def __unicode__(self):
         return "[Collection]".format()
     def save(self, *args, **kwargs):
         #TODO: set owner here.
+        if not self.pk:
+            self.created_on = datetime.now()
         self.updated_on = datetime.now()
         super(Collection, self).save(*args, **kwargs)
 
@@ -46,20 +53,25 @@ class CollectionTopic(models.Model):
         return "[CollectionTopic] {}".format(self.name)
 
 # this function provides the default folder for Seeds
-#def get_uncategorized_seed_folder():
-#    return SeedFolder.objects.get(name='Uncategorized')
+def get_uncategorized_seed_folder():
+    return SeedFolder.objects.get_or_create(name='Uncategorized')[0]
 
 # Seeds represent the URL from which a Crawl should commence, as well as a 
 # frequency schedule
 class Seed(models.Model):
     url = models.URLField(max_length=200)
     collection = models.ForeignKey('Collection')
+    owner = models.ForeignKey("accounts.Account", blank=True, null=True)
     frequency = models.CharField(max_length=3, choices=CONSTANTS['SeedFrequency'])
     capture = models.ForeignKey('SeedCapturePattern', blank=True, null=True)
     public = models.BooleanField(default=False)
-    folder = models.ForeignKey('SeedFolder', blank=True, null=True, )#default=get_uncategorized_seed_folder)
-    group = models.ForeignKey('SeedGroup', blank=True, null=True)
-    metadata = PickledObjectField(blank=True, null=True)
+    login = models.BooleanField(default=False)
+    folder = models.ForeignKey('SeedFolder', blank=True, null=True, default=get_uncategorized_seed_folder)
+    metadata = jsonfield.JSONField(blank=True, null=True)
+    comments = generic.GenericRelation('Comment')
+    #def next_crawl_date():
+    #    crawl in self.crawl_set.():
+            
     def __unicode(self):
         return "[Seed] {}{}{}".format(self.url, self.public and " (public)", self.frequency and " frequency: " + self.frequency)
 
@@ -68,32 +80,35 @@ class SeedCapturePattern(models.Model):
     name = models.CharField(max_length=100)
     pattern = models.CharField(max_length=200)
     def __unicode__(self):
-        return "[SeedCapturePattern] {} ({})".format(self.name, self.pattern)
+        return "{} ({})".format(self.name, self.pattern)
 
 # SeedScopeRules define boundaries for Crawls spawned by a Seed.
 class SeedScopeRule(models.Model):
-    rule_type = models.CharField(max_length=20, choices=CONSTANTS['SeedScopeRuleTypes'])
-    rule_match = models.CharField(max_length=200)
-    document_limit = models.BooleanField()
-    use_document_limit = models.IntegerField()
+    collection = models.ForeignKey('Collection', blank=True, null=True)
+    seeds = models.ManyToManyField('Seed', blank=True, null=True)
+    rule_type = models.CharField(max_length=20, choices=CONSTANTS['SeedScopeRuleTypes'], blank=True, null=True)
+    rule_match = models.CharField(max_length=200, blank=True, null=True)
+    document_limit = models.IntegerField(default=10000, blank=True, null=True)
+    use_document_limit = models.BooleanField(default=True)
+    comments = generic.GenericRelation('Comment')
+    def print_rule(self):
+        return "{}".format(self.rule_type and " URL " + self.rule_type + " '" + self.rule_match + "'" or "")
     def __unicode__(self):
         return "[SeedScopeRule]{}{}".format(
                    self.rule_type and " URL " + self.rule_type + " " + self.rule_match or "",
-                   self.use_document_limit and " limit to " + self.document_limit or "",
+                   self.use_document_limit and " limit to " + str(self.document_limit) or "",
                )
+    def save(self, *args, **kwargs):
+        # save initially, to ensure that we have a primary key when working on the below
+        super(SeedScopeRule, self).save(*args, **kwargs)
+        # add references to my Collection's Seeds if I have a Collection but no Seeds
+        if self.collection and not self.seeds.count():
+            self.seeds.add(*[seed for seed in self.collection.seed_set.all()])
 
-# TODO: Ask someone why we need SeedGroups in addition to SeedFolders.
-class SeedGroup(models.Model):
-    name = models.CharField(max_length=200)
-    def __unicode__(self):
-        return "[SeedGroup] {}".format(self.name)
-
-# Seed folders are a hierarchical tree structure. The 'parent' field makes this happen.
-# a [null] in the 'parent' field means that this terminates a folder tree.
+# Seed folders are not hierarchical.
 class SeedFolder(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey('auth.User', blank=True, null=True)
-    parent = models.ForeignKey('self', related_name='children', null=True, blank=True)
+    owner = models.ForeignKey("accounts.Account", blank=True, null=True)
     def __unicode__(self):
         return "[SeedFolder] {}".format(self.name)
 
@@ -103,7 +118,8 @@ class Crawl(models.Model):
     begun_on = models.DateTimeField()
     ended_on = models.DateTimeField()
     completed = models.BooleanField()
-    metadata = PickledObjectField(blank=True, null=True)
+    metadata = jsonfield.JSONField(blank=True, null=True)
+    comments = generic.GenericRelation('Comment')
     def __unicdoe__(self):
         #TODO: if self.seed is not strictly necessary here, consider removing it. Triggers a query.
         return "[Crawl] From {} begun {:%Y-%m-%d %H:%i:%s}".format(self.seed, self.begun_on)
@@ -114,7 +130,8 @@ class Document(models.Model):
     body = models.TextField(blank=True, null=True)
     url = models.URLField()
     fetch_date = models.DateTimeField(default=datetime.now)
-    metadata = PickledObjectField(blank=True, null=True)
+    metadata = jsonfield.JSONField(blank=True, null=True)
+    comments = generic.GenericRelation('Comment')
 
 # Comments can apply to any other object via the 'comment_on' GenericForiegnKey.
 class Comment(models.Model):

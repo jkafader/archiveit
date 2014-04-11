@@ -1,0 +1,26 @@
+<table><tbody>
+  {% if form.non_field_errors %}
+  <tr class='form-error'>
+    <td><div class='alert-box' data-alert>{{ form.non_field_errors }}</div></td>
+  </tr>
+  {% endif %} 
+  {% for field in form %}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <tr class='form-error'>
+            <td class='alert-box' data-alert>{{ error }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+ {% if not field.is_hidden %}
+  <tr class='formfield'> 
+    <td>
+      <div class='width-20-percent form-label'>{{ field.label }}:</div>
+      <div class='width-80-percent'>{{ field }}</div>
+    </td>
+  </tr>
+  {% else %}
+    {{ field }}
+  {% endif %}
+  {% endfor %}
+</tbody></table>

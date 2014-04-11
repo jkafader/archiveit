@@ -1,2 +1,60 @@
 {% extends "PAGE-base.html" %}
 
+{% block content %}
+{% include "PARTIAL-wizard_steps.html" %}
+
+<h5>
+Review the information you entered. You can edit any of the information before running a crawl.
+</h5>
+<div class='margin-bottom one'>
+	<div class='button secondary uppercase small bold margin-right two'>Run Test Crawl</div>
+	<div class='button uppercase small bold margin-right two'>Run Regular Crawl</div>
+	<a href="/collection/{{ collection.id }}">View Collection &rsaquo;</a>
+</div>
+
+<form action='.' method='POST' class='margin-bottom three'>
+	<div class='row'>
+	<h5 class='small-8 columns'>Collection Info</h5>
+	<div class='small-4 columns right'>
+	  <input type='submit' class='button right tiny uppercase bold nomargin' value='Save Edits'>
+	</div>
+	</div>
+  <div class='panel blanktable'>
+  {% csrf_token %}
+  {% include "PARTIAL-form_fields.html" %}
+  </div>
+</form>
+
+<div class='margin-bottom three'>
+{% with seeds=collection.seed_set.all %}
+  {% include "PARTIAL-seed_grid.html" %}
+{% endwith %}
+</div>
+
+<div class='margin-bottom three'>
+<h5>Collection Metadata</h5>
+{% with key_object=collection %}
+{% with editing="false" %}
+{% with buttons="true" %}
+{% with metadata=collection.metadata %}
+  {% include "PARTIAL-metadata_grid.html" %}
+{% endwith %}
+{% endwith %}
+{% endwith %}
+{% endwith %}
+</div>
+</div>
+
+<div class='margin-bottom three'>
+{% with rules=collection.seedscoperule_set.all %}
+  {% include "PARTIAL-seed_scope_grid.html" %}
+{% endwith %}
+</div>
+
+{% endblock %}
+
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}

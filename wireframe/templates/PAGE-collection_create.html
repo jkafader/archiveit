@@ -1,0 +1,19 @@
+{% extends "PAGE-base.html" %}
+
+{% block content %}
+{% include "PARTIAL-wizard_steps.html" %}
+<div class='margin-bottom six'>
+<form action='.' method='POST'>
+  {% csrf_token %}
+  <div class='margin-bottom two'>
+  {% include "PARTIAL-form_fields.html" %}
+  </div>
+  <input type='submit' class='button uppercase bold small' value='Next Step &raquo;'>
+</form>
+</div>
+{% endblock %}
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}

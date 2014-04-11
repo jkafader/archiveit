@@ -1,0 +1,14 @@
+<h5>{% if collection.name %}Collection <em>"{{ collection.name }}"</em>{% else %}Create a new Collection{% endif %}</h5>
+<div class='row'>
+  <div class='medium-12 columns wizard-steps'>
+  {% for s in steps %}
+  {% if not forloop.first %}<div class='wizard-arrowtail-boundary show-for-large-up'><div class='wizard-arrowtail {% if step == forloop.counter0 %}active{% endif %}'></div></div>{% endif %}
+  <div class='left wizard-step width-18-percent {% if step == forloop.counter0 %}active{% endif %}'><span class='hide-for-large-up'>{{ forloop.counter }}</span><span class='show-for-large-up'>{{ s.0 }}</span></div>
+  <div class='hide-for-large-up' style='float:left; margin-right:3px;'>&nbsp;</div>
+  {% if not forloop.last %}<div class='wizard-arrowhead show-for-large-up {% if step == forloop.counter0 %}active{% endif %}'></div>{% endif %}
+  {% endfor %}
+  <div class='wizard-steps-border'>
+  </div>
+  </div>
+</div>
+<br>

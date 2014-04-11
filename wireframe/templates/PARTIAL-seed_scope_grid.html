@@ -1,0 +1,98 @@
+{% comment %} This contains the 'jsonize' template filter. {% endcomment %}
+{% load archiveit_extras %}
+
+{% verbatim %}
+<div class='seedscoperule grid' ng-controller='SeedScopeRuleController'>
+<h5>Your Scoping Rules: {{ rules.length }} Added</h5>
+
+  <div reveal-modal='showDeleteConfirm' class='reveal-modal tiny' data-reveal>
+    <p>Are you sure you'd like to delete the selected Scope Rules?</p>
+    <input type='button' class='button secondary' ng-click='showDeleteConfirm=false' value='Cancel'>
+    <input type='button' class='button' ng-click='delete()' value='Delete'>
+  </div>
+  <form action='/json/' method='POST'>
+	  <textarea name='models' style='display:none;'>{{ rules }}</textarea>
+	  {% endverbatim %}
+	  {% csrf_token %}
+	  <input type='hidden' name='next' value='{{ request.path }}'>
+	  {% verbatim %}
+		<ul class='button-group'>
+		  <li><div class='button tiny nomargin'><input type='checkbox' ng-model='selectAllChecked' ng-change='toggleAll()'></div></li>
+		  <li><div class='button tiny uppercase bold nomargin' ng-click='confirmDelete()'>Delete Selected</div><li>
+		  <li><div class='button secondary tiny uppercase bold nomargin' ng-click='toggleEditing()' ng-hide='editing'>Edit</div></li>
+		  <li><input type='button' ng-show='editing' value='Cancel' class='button secondary tiny uppercase bold nomargin' ng-click='cancelChanges()'></li>
+		  <li><input type='submit' ng-show='editing' class='button tiny uppercase bold nomargin' value='Save Changes'></li>
+		</ul>
+  </form>
+<table class='margin-bottom six'>
+<thead>
+  <tr>
+    <th class='head select' style='width:5%;'></th>
+    <th class='head rule' style='width:50%;'>Block URL if...</th>
+    <th class='head limit' style='width:30%;'>Document Limit</th>
+    <th class='head comments'>C</th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat='rule in rules'>
+    <td class='select'><input type='checkbox' ng-checked='selection[rule.pk]'></td>
+    <td class='rule'>
+      <span ng-hide='editing'>{{ rule.fields.rule_type && "URL "+rule.fields.rule_type + " '" + rule.fields.rule_match + "'" || "" }}</span>
+      <span ng-show='editing'>
+         <div class='row collapse'>
+          <span class='small-1 column'>URL</span>
+          <span class='small-3 column'><select ng-model='rule.fields.rule_type'><option ng-repeat="option in ruleOptions">{{ option }}</option></select></span>
+          <span class='small-8 column'><input type='text' ng-model='rule.fields.rule_match'></span>
+         </div>
+      </span>
+    </td>
+    <td class='frequency'>
+		<span ng-hide='editing'>{{ rule.fields.use_document_limit && rule.fields.document_limit || "" }}</span>
+		<span ng-show='editing'>
+		   <div class='row collapse'>
+		     <span class='small-1 columns'><input type='checkbox' ng-model='rule.fields.use_document_limit'></span>
+		     <span class='small-3 columns'> limit to: </span>
+		     <span class='small-8 columns'><input type='text' ng-model='rule.fields.document_limit'></span>
+		   </div>
+		</span>
+    </td>
+    <td class='small-1 column comments'>{{ comments[rule.pk].count }}</td>
+  </tr>
+</tbody>
+</table>
+{% endverbatim %}
+
+
+<script>
+app.controller("SeedScopeRuleController", ["$scope", function($scope){
+    $scope.rules = {{ rules|jsonize|safe }};
+    $scope.selection = {};
+    $scope.editing = false;
+    $scope.selectAllChecked = false;
+    $scope.ruleOptions = ['contains', 'startswith', 'endswith', 'matches'];
+    $scope.delete = function(){
+        $scope.showDeleteConfirm = false;
+        alert('Bulk deletion is not yet implemented.');
+    }
+    $scope.confirmDelete = function(){
+        $scope.showDeleteConfirm = true;
+    }
+    $scope.cancelChanges = function(){
+        $scope.editing = false;
+        $scope.rules = $scope.initialRules;
+    }
+    $scope.toggleEditing = function(){
+        $scope.editing = !$scope.editing;
+        // if we're currently editing, save a copy of the initial state of the rules so we can cancel edits.
+        if($scope.editing){
+            $scope.initialRules = angular.copy($scope.rules);
+        }
+    }
+    $scope.toggleAll = function(){
+        if($scope.selectAllChecked == false){ $scope.selection={}; return }
+        for(i=0; i<$scope.rules.length; i++){
+            $scope.selection[$scope.rules[i].pk] = true;
+        }
+    }
+}]);
+</script>

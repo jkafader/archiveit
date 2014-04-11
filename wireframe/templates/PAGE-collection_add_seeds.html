@@ -1,0 +1,41 @@
+{% extends "PAGE-base.html" %}
+
+{% block content %}
+{% include "PARTIAL-wizard_steps.html" %}
+<h5 class='padding-bottom padding-top one'>Add seeds which are the starting point for your collection</h5>
+<div class='panel blanktable'>
+<a href='#' class='button secondary padding-top padding-bottom quarter small border right'>Add Seeds in Bulk</a>
+<form action='.' method='POST'>
+  {% csrf_token %}
+  {% include "PARTIAL-form_fields.html" %}
+  <div class='width-20-percent'></div>
+  <div class='width-80-percent padding-left half'>
+    <input type='submit' class='button secondary small border padding-top padding-bottom quarter' value='Add Seed'>
+  </div>
+</form>
+</div>
+<div class='margin-bottom three'>
+  <a href='/collection/{{ collection.id }}/create/' class='button secondary uppercase bold small margin-right two'>&laquo; Previous Step</a>
+  <a href='/collection/{{ collection.id }}/add-metadata/' class='button uppercase bold small'>Next Step &raquo;</a>
+</div>
+
+
+{% with seeds=collection.seed_set.all %}
+  {% if not seeds %}
+    <h5>Your Seeds</h5>
+    <hr>
+    <div class='margin-bottom six'>
+    You don't have any seeds in your collection yet...
+    </div>
+  {% else %}
+    {% include "PARTIAL-seed_grid.html" %}
+  {% endif %}
+{% endwith %}
+
+{% endblock %}
+
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}

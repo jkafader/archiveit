@@ -23,7 +23,7 @@
 // $base-font-size: 100%;
 
 // The $base-line-height is 100% while $base-font-size is 150%
-// $base-line-height: 150%;
+$base-line-height: 100%;
 
 // We use this to control whether or not CSS classes come through in the gem files.
 // $include-html-classes: true;
@@ -35,14 +35,14 @@
 // $include-html-grid-classes: $include-html-classes;
 // $include-xl-html-grid-classes: false;
 
-// $row-width: rem-calc(1000);
+$row-width: rem-calc(1260);
 // $column-gutter: rem-calc(30);
 // $total-columns: 12;
 
 // We use these to control various global styles
 // $body-bg: #fff;
 // $body-font-color: #222;
-// $body-font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+$body-font-family: "Avenir", "Nunito", Helvetica, Arial, sans-serif;
 // $body-font-weight: normal;
 // $body-font-style: normal;
 
@@ -55,12 +55,12 @@
 // $default-float: left;
 
 // We use these as default colors throughout
-// $primary-color: #008CBA;
+$primary-color: #999;
 // $secondary-color: #e7e7e7;
 // $alert-color: #f04124;
 // $success-color: #43AC6A;
 // $warning-color: #f08a24;
-// $info-color: #a0d3e8;
+$info-color: #eee;
 
 // We use these to make sure border radius matches unless we want it different.
 // $global-radius: 3px;
@@ -117,7 +117,7 @@
 // $include-html-type-classes: $include-html-classes;
 
 // We use these to control header font styles
-// $header-font-family: $body-font-family;
+$header-font-family: $body-font-family;
 // $header-font-weight: normal;
 // $header-font-style: normal;
 // $header-font-color: #222;
@@ -127,12 +127,12 @@
 // $header-text-rendering: optimizeLegibility;
 
 // We use these to control header font sizes
-// $h1-font-size: rem-calc(44);
-// $h2-font-size: rem-calc(37);
-// $h3-font-size: rem-calc(27);
-// $h4-font-size: rem-calc(23);
-// $h5-font-size: rem-calc(18);
-// $h6-font-size: 1rem;
+$h1-font-size: rem-calc(32);
+$h2-font-size: rem-calc(28);
+$h3-font-size: rem-calc(24);
+$h4-font-size: rem-calc(20);
+$h5-font-size: rem-calc(16);
+$h6-font-size: 1rem;
 
 // These control how subheaders are styled.
 // $subheader-line-height: 1.4;
@@ -170,7 +170,7 @@
 // $hr-border-width: 1px;
 // $hr-border-style: solid;
 // $hr-border-color: #ddd;
-// $hr-margin: rem-calc(20);
+$hr-margin: rem-calc(10) 0 rem-calc(20);
 
 // We use these to style lists
 // $list-style-position: outside;
@@ -317,10 +317,10 @@
 // $include-html-button-classes: $include-html-classes;
 
 // We use these to build padding for buttons.
-// $button-tny: rem-calc(10);
-// $button-sml: rem-calc(14);
-// $button-med: rem-calc(16);
-// $button-lrg: rem-calc(18);
+$button-tny: rem-calc(6);
+$button-sml: rem-calc(10);
+$button-med: rem-calc(12);
+$button-lrg: rem-calc(14);
 
 // We use this to control the display property.
 // $button-display: inline-block;
@@ -477,7 +477,7 @@
 // $include-html-form-classes: $include-html-classes;
 
 // We use this to set the base for lots of form spacing and positioning styles
-// $form-spacing: rem-calc(16);
+$form-spacing: rem-calc(10);
 
 // We use these to style the labels in different ways
 // $form-label-pointer: pointer;
@@ -779,7 +779,7 @@
 
 // We use these to set default inner padding and bottom margin
 // $panel-margin-bottom: rem-calc(20);
-// $panel-padding: rem-calc(20);
+$panel-padding: rem-calc(10);
 
 // We use these to set default font colors
 // $panel-font-color: #333;
@@ -1035,20 +1035,20 @@
 // $include-html-table-classes: $include-html-classes;
 
 // These control the background color for the table and even rows
-// $table-bg: #fff;
-// $table-even-row-bg: #f9f9f9  ;
+//$table-bg: #eee;
+$table-even-row-bg: #eaeaea;
 
 // These control the table cell border style
 // $table-border-style: solid;
-// $table-border-size: 1px;
+$table-border-size: 0px;
 // $table-border-color: #ddd;
 
 // These control the table head styles
-// $table-head-bg: #f5f5f5  ;
-// $table-head-font-size: rem-calc(14);
-// $table-head-font-color: #222;
-// $table-head-font-weight: bold;
-// $table-head-padding: rem-calc(8 10 10);
+$table-head-bg: $primary-color;
+$table-head-font-size: rem-calc(12);
+$table-head-font-color: white;
+$table-head-font-weight: normal;
+$table-head-padding: rem-calc(4 6 3);
 
 // These control the row padding and font styles
 // $table-row-padding: rem-calc(9 10);
@@ -1130,7 +1130,7 @@
 // $include-html-top-bar-classes: $include-html-classes;
 
 // Background color for the top bar
-// $topbar-bg-color: #333;
+$topbar-bg-color: #777;
 // $topbar-bg: $topbar-bg-color;
 
 // Height and margin

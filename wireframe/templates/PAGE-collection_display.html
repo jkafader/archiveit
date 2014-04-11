@@ -1,0 +1,65 @@
+{% extends "PAGE-base.html" %}
+
+{% block content %}
+
+<h5>Collection</h5>
+<div class='panel margin-bottom zero'>
+<div class='medium-1 column right'>{% if collection.active %}Active{% endif %}</div>
+<div class='medium-1 column right'>{% if collection.public %}Public{% endif %}</div>
+<div class='row collapse'>
+	<h2 class='bold medium-5 columns'>{{ collection.name }}</h2>
+	<p class='medium-7 columns small-type margin-bottom zero'>created on {{ collection.created_on }}</p>
+</div>
+</div>
+<div class='row'>
+<div class='small-3 columns padding-right zero'><a href='/collection/{{ collection.pk }}/reports/' class='button small uppercase width-100-percent'>Reports</a></div>
+<div class='small-3 columns padding-right padding-left zero'><a href='/collection/{{ collection.pk }}/scope/' class='button small uppercase width-100-percent'>Crawl Scope</a></div>
+<div class='small-3 columns padding-right padding-left zero'><a href='/collection/{{ collection.pk }}/metadata/' class='button small uppercase width-100-percent'>Collection Metadata</a></div>
+<div class='small-3 columns padding-left zero'><a href='/collection/{{ collection.pk }}/documents/metadata/' class='button small uppercase  width-100-percent'>Document Metadata</a></div>
+</div>
+
+<h5>Crawling Activity</h5>
+<table>
+  <thead>
+    <tr>
+		<th class='head'>Most Recent Crawl</td>
+		<th class='head'>Frequency</td>
+		<th class='head'>Next Scheduled Crawl</td>
+		<th class='head'></td>
+	</tr>
+  </thead>
+  {% if not crawls %}
+  <tbody>
+	<tr>
+		<td colspan='4'>
+		<p>No Crawl Activity</p>
+		</td>
+	</tr>
+  </tbody>
+  {% else %}
+  <tbody>
+	{% for crawl in crawls %}
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  {% endif %}
+</table>
+
+{% with seeds=collection.seed_set.all %}
+<h5>{{ seeds.count }} Active Seeds</h5>
+  {% include "PARTIAL-seed_grid.html" %}
+{% endwith %}
+
+
+{% endblock %}
+
+
+{% block rightcolumn %}
+<h5>Help</h5>
+<div class='panel'></div>
+{% endblock %}
