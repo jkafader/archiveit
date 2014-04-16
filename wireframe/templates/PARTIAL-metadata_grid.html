@@ -7,9 +7,11 @@
   <div class='button' ng-hide='editing' ng-click='editing=true'>Edit</div>
   <div class='button secondary' ng-show='editing' ng-click='editing=false'>Cancel</div>
 </div>
-   <div ng-repeat="field in schemas.current.fields" class='row {{ editing || "panel" }}' ng-show='editing || metadata[field.slug]'>
-     <div class='small-2 columns'>{{ field.name }}</div>
-     <div class='small-10 columns'>
+   <div ng-repeat="field in schemas.current.fields" class='row' ng-show='editing || metadata[field.slug]'>
+     <div class='small-2 columns'>
+         {{ field.name }}
+     </div>
+     <div class='small-10 columns {{ editing || "padding-bottom one" }}'>
         <div class='row collapse' ng-show='editing'>
         <div class='small-10 columns'>
            <input type="text" ng-model="field_values[field.slug]" ng-focus="paste($event)">
@@ -22,6 +24,7 @@
         {{ value }}<a class='right' ng-show='editing' ng-click="metadata_remove(field.slug, value)">Remove</a>
         </div>
      </div>
+        <hr class='small-10 columns small-centered padding-bottom one' ng-hide='editing'>
    </div>
 
 </div>

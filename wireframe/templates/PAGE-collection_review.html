@@ -3,7 +3,7 @@
 {% block content %}
 {% include "PARTIAL-wizard_steps.html" %}
 
-<h5>
+<h5 id='top'>
 Review the information you entered. You can edit any of the information before running a crawl.
 </h5>
 <div class='margin-bottom one'>
@@ -14,7 +14,7 @@ Review the information you entered. You can edit any of the information before r
 
 <form action='.' method='POST' class='margin-bottom three'>
 	<div class='row'>
-	<h5 class='small-8 columns'>Collection Info</h5>
+	<h5 class='small-8 columns' id='collection-info'>Collection Info</h5>
 	<div class='small-4 columns right'>
 	  <input type='submit' class='button right tiny uppercase bold nomargin' value='Save Edits'>
 	</div>
@@ -32,7 +32,7 @@ Review the information you entered. You can edit any of the information before r
 </div>
 
 <div class='margin-bottom three'>
-<h5>Collection Metadata</h5>
+<h5 id='metadata-grid'>Collection Metadata</h5>
 {% with key_object=collection %}
 {% with editing="false" %}
 {% with buttons="true" %}
@@ -51,10 +51,37 @@ Review the information you entered. You can edit any of the information before r
 {% endwith %}
 </div>
 
+<div class='margin-bottom one'>
+	<div class='button secondary uppercase small bold margin-right two'>Run Test Crawl</div>
+	<div class='button uppercase small bold margin-right two'>Run Regular Crawl</div>
+</div>
+
 {% endblock %}
 
 
 {% block rightcolumn %}
 <h5>Help</h5>
-<div class='panel'></div>
+<div class='panel'>
+<div class='button secondary' onclick='$(document).foundation("joyride", "start");'>Guided Tour</div>
+</div>
+{% endblock %}
+
+{% block help %}
+<ol class='joyride-list' data-joyride>
+  <li data-id='top' data-text='Next &raquo;'>
+  <p>On this page, you can review the information for your collection, and edit the options you entered during the last few steps.</p>
+  </li>
+  <li data-id='collection-info' data-text='Next &raquo;'>
+  <p>Use this area to edit the title of your new collection here, and set its status to public or private with the checkbox.</p>
+  </li>
+  <li data-id='seed-grid' data-text='Next &raquo;'>
+  <p>If you need to edit your seeds, click [Edit], then make your changes and click [Save Changes]</p>
+  </li>
+  <li data-id='metadata-grid' data-text='Next &raquo;'>
+  <p>Metadata for your collection (which propagates to your seeds) can be edited by clicking [Edit] here.</p>
+  </li>
+  <li data-id='scope-grid' data-text='Finish'>
+  <p>Edit your Scoping rules to make sure you don't crawl too many documents. Click [Edit], then enter your changes, and click [Save Changes] to save.</p>
+  </li>
+</ol>
 {% endblock %}

@@ -42,7 +42,7 @@ class CollectionWizard():
             {'name': '2. Add Seeds', 		'template':'PAGE-collection_add_seeds.html',		'form': CollectionAddSeedForm,		'sub_form': True, 	'next': "/collection/{}/add-seeds/"},
             {'name': '3. Add Metadata', 	'template':'PAGE-collection_add_metadata.html',		'form': CollectionAddMetadataForm,	'sub_form': False, 	'next': "/collection/{}/add-scope/"},
             {'name': '4. Define Scope', 	'template':'PAGE-collection_add_seed_scope.html',	'form': CollectionAddSeedScopeForm,	'sub_form': True, 	'next': "/collection/{}/add-scope/"},
-            {'name': '5. Review Summary', 	'template':'PAGE-collection_review.html',			'form': CollectionReviewForm,		'sub_form': False, 	'next': "/collection/{}/"},
+            {'name': '5. Review Summary', 	'template':'PAGE-collection_review.html',			'form': CollectionReviewForm,		'sub_form': False, 	'next': "/collection/{}/review/"},
         ]
     def as_view(self, step):
         self.step = self.creation_steps[step]

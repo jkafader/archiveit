@@ -3,7 +3,7 @@
 
 {% verbatim %}
 <div class='seedscoperule grid' ng-controller='SeedScopeRuleController'>
-<h5>Your Scoping Rules: {{ rules.length }} Added</h5>
+<h5 id='scope-grid'>Your Scoping Rules: {{ rules.length }} Added</h5>
 
   <div reveal-modal='showDeleteConfirm' class='reveal-modal tiny' data-reveal>
     <p>Are you sure you'd like to delete the selected Scope Rules?</p>
@@ -20,7 +20,7 @@
 		  <li><div class='button tiny nomargin'><input type='checkbox' ng-model='selectAllChecked' ng-change='toggleAll()'></div></li>
 		  <li><div class='button tiny uppercase bold nomargin' ng-click='confirmDelete()'>Delete Selected</div><li>
 		  <li><div class='button secondary tiny uppercase bold nomargin' ng-click='toggleEditing()' ng-hide='editing'>Edit</div></li>
-		  <li><input type='button' ng-show='editing' value='Cancel' class='button secondary tiny uppercase bold nomargin' ng-click='cancelChanges()'></li>
+		  <li><input type='button' ng-show='editing' value='Discard Edits' class='button secondary tiny uppercase bold nomargin' ng-click='cancelChanges()'></li>
 		  <li><input type='submit' ng-show='editing' class='button tiny uppercase bold nomargin' value='Save Changes'></li>
 		</ul>
   </form>

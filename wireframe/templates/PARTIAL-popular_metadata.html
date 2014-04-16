@@ -3,9 +3,9 @@
 <h5>Metadata from other Collections</h5>
 <div class='panel'>
   <div class='width-50-percent' ng-repeat='d in data track by $index'>
-    <div class='row collapse' ng-click='cpy(d)'>
-       <div class='small-9 columns' ><input type='text' disabled='disabled' value='{{ d }}' ng-click='data=[]'></div>
-       <div class='small-3 columns' ><span class='postfix' ng-click='cpy'>+</span></div>
+    <div class='row collapse' ng-click='copy(d)'>
+       <div class='small-9 columns' ><input type='text' disabled='disabled' value='{{ d }}' ng-click='copy(d)'></div>
+       <div class='small-3 columns' ><span class='postfix' ng-click='copy(d)'>+</span></div>
     </div>
   </div>
 </div>
@@ -43,7 +43,7 @@ app.controller("PMCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
        "Lorem ipsum",
        "Lorem ipsum",
     ];
-    $scope.cpy = function(val){
+    $scope.copy = function(val){
         $rootScope.$emit("copy", val);
     };
 }]);

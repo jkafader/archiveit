@@ -31,7 +31,7 @@ def format_filesize(number):
 class UserProfile(models.Model):
     user = models.OneToOneField('auth.User')
     account = models.ForeignKey('Account')
-    def __unicode__(self):
+    def __str__(self):
         return "[UserProfile] for {}".format(self.user)
 
 class Account(models.Model):
@@ -44,7 +44,7 @@ class Account(models.Model):
         if not self.pk:
             self.created_on = datetime.now()
         super(Account, self).save(*args, **kwargs)
-    def __unicode__(self):
+    def __str__(self):
         return "[Account] {}".format(self.name)
 
 class AccountMessage(models.Model):
@@ -54,7 +54,7 @@ class AccountMessage(models.Model):
     viewed_on = models.DateTimeField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True)
     target_url = models.CharField(max_length=200, blank=True, null=True)
-    def __unicode__(self):
+    def __str__(self):
         return "[Message] for {}".format(self.account)
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -79,3 +79,5 @@ class StorageQuota(models.Model):
         if human_readable:
             return format_filesize(available)
         return available
+    def __str__(self):
+        return "Quota for {}".format(self.account.name)

@@ -36,7 +36,7 @@ class Collection(models.Model):
     comments = generic.GenericRelation('Comment')
     def next_crawl_date(self):
         return datetime.now + datetime.timedelta(7)
-    def __unicode__(self):
+    def __str__(self):
         return "[Collection]".format()
     def save(self, *args, **kwargs):
         #TODO: set owner here.
@@ -49,8 +49,8 @@ class Collection(models.Model):
 # They are shared between all users.
 class CollectionTopic(models.Model):
     name = models.CharField(max_length=200)
-    def __unicode__(self):
-        return "[CollectionTopic] {}".format(self.name)
+    def __str__(self):
+        return self.name
 
 # this function provides the default folder for Seeds
 def get_uncategorized_seed_folder():
@@ -78,9 +78,9 @@ class Seed(models.Model):
 # SeedCapturePatterns are a list of filetypes patterns for seeds to capture. They're set up as a class so they can be administered through the admin.
 class SeedCapturePattern(models.Model):
     name = models.CharField(max_length=100)
-    pattern = models.CharField(max_length=200)
-    def __unicode__(self):
-        return "{} ({})".format(self.name, self.pattern)
+    mimetype = models.CharField(max_length=200, null=True, blank=True)
+    def __str__(self):
+        return "{} ({})".format(self.name, self.mimetype)
 
 # SeedScopeRules define boundaries for Crawls spawned by a Seed.
 class SeedScopeRule(models.Model):
@@ -93,7 +93,7 @@ class SeedScopeRule(models.Model):
     comments = generic.GenericRelation('Comment')
     def print_rule(self):
         return "{}".format(self.rule_type and " URL " + self.rule_type + " '" + self.rule_match + "'" or "")
-    def __unicode__(self):
+    def __str__(self):
         return "[SeedScopeRule]{}{}".format(
                    self.rule_type and " URL " + self.rule_type + " " + self.rule_match or "",
                    self.use_document_limit and " limit to " + str(self.document_limit) or "",
@@ -109,8 +109,8 @@ class SeedScopeRule(models.Model):
 class SeedFolder(models.Model):
     name = models.CharField(max_length=100)
     owner = models.ForeignKey("accounts.Account", blank=True, null=True)
-    def __unicode__(self):
-        return "[SeedFolder] {}".format(self.name)
+    def __str__(self):
+        return self.name
 
 # Crawls are created from Seeds, presumably by a cron or Celery like process.
 class Crawl(models.Model):
@@ -139,5 +139,5 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField()
     comment_on = generic.GenericForeignKey()
-    def __unicode__(self):
+    def __str__(self):
         return "[Comment] on {} #{}".format(self.content_type, self.object_id)
