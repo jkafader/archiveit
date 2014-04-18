@@ -67,12 +67,18 @@ WSGI_APPLICATION = 'wireframe.wsgi.application'
 
 DATABASES = {
 'default': {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'archiveit',
-        'USER': 'archiveit',
-        'PASSWORD': 'archiveit',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+#        'ENGINE':'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'archiveit',
+#        'USER': 'archiveit',
+#        'PASSWORD': 'archiveit',
+#        'HOST': '127.0.0.1',
+#        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': './test.sqlite',
+        'USER': '',
+        'PASSWORD':'',
+        'HOST':'',
+        'PORT':'',
     }
 }
 

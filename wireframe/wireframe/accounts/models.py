@@ -80,4 +80,4 @@ class StorageQuota(models.Model):
             return format_filesize(available)
         return available
     def __str__(self):
-        return "Quota for {}".format(self.account and self.account.name or "Undefined Account")
+        return "StorageQuota"

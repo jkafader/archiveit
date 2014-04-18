@@ -43,8 +43,8 @@ Use the freshly-installed python3.3 to install virtualenv globally::
 
 
 
-Create a virtualenv in working directory
-=========================================
+Create a virtualenv in your working directory
+=============================================
 
 In your working directory, you'll now need a complete virtualenv. This is how you 
 initialize the virtualenv to work with python3.3::
@@ -53,7 +53,8 @@ initialize the virtualenv to work with python3.3::
 
 
 
-Install binary packages with pip
+
+Install python packages with pip
 ================================
 
 Now the pip magic happens. Use it to initialize the entire set of packages you'll need
@@ -62,6 +63,8 @@ to run the dev server::
     cd AI5_wireframe
 
     source bin/activate
+    
+    (you now have the virtualenv python and pip activated)
 
     pip install -r requirements.txt
 
