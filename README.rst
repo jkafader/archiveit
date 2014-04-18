@@ -39,7 +39,7 @@ Install virtualenv Globally
 
 Use the freshly-installed python3.3 to install virtualenv globally::
 
-    pip3.3 install virtualenv
+    pip3 install virtualenv
 
 
 
